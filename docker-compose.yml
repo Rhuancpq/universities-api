@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+  api:
+    build: 
+      context: api
+      dockerfile: ../Dockerfile
+    container_name: api-universities
+    ports:
+      - "7000:5000"
+    volumes:
+      - ./api:/app
+    restart: on-failure
+    depends_on:
+      - mongo
+    networks:
+      - api-net
+
+  population:
+    build: 
+      context: population
+      dockerfile: ../Dockerfile
+    container_name: population
+    restart: on-failure
+    depends_on:
+      - mongo
+    networks:
+      - api-net
+
+  mongo:
+    container_name: universities-db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: universities
+    volumes:
+      - db_data:/data/db
+    logging:
+      driver: none
+    networks:
+      - api-net
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+    networks:
+      - api-net
+
+volumes:
+  db_data:
+
+networks:
+  api-net:
+    driver: bridge
