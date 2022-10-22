@@ -22,13 +22,12 @@ async function run() {
     const database = client.db('universities')
 
     const collections = await database.listCollections().toArray()
+    const collection = database.collection('universities')
+    if (collections.some((c) => c.name === 'universities')) {
+      await collection.drop()
+    }
+
     for (const country of countries) {
-      const collection = database.collection(country)
-
-      if (collections.some((c) => c.name === country)) {
-        await collection.drop()
-      }
-
       const { data } = await axios.get(
         'http://universities.hipolabs.com/search?country=' + country
       )
@@ -38,7 +37,6 @@ async function run() {
       }
 
       console.log('Inserted documents =>', data.length)
-      console.log('Collection name =>', collection.collectionName)
       console.log('Completed =>', country)
     }
   } finally {
