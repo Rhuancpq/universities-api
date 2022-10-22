@@ -11,6 +11,10 @@ const universitySchema = new Schema({
     type: String,
     required: true,
   },
+  state_province: {
+    type: String,
+    required: true,
+  },
   web_pages: {
     type: [String],
     required: true,
