@@ -1,14 +1,15 @@
-version: "3.8"
+version: '3.8'
 services:
   api:
-    build: 
+    build:
       context: api
       dockerfile: ../Dockerfile
     container_name: api-universities
     ports:
-      - "7000:5000"
+      - '7000:5000'
     volumes:
       - ./api:/app
+      - /app/node_modules
     restart: on-failure
     depends_on:
       - mongo
@@ -16,7 +17,7 @@ services:
       - api-net
 
   population:
-    build: 
+    build:
       context: population
       dockerfile: ../Dockerfile
     container_name: population
