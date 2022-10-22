@@ -23,7 +23,7 @@ class UniversitiesController {
     }
   }
 
-  async getUniversities(req, res) {
+  async showUniversity(req, res) {
     try {
       const id = req.params.id
       const universities = await University.findById(id).select(
@@ -35,9 +35,72 @@ class UniversitiesController {
     }
   }
 
-  async postUniversity(req, res) {}
+  async postUniversity(req, res) {
+    try {
+      const {
+        name,
+        country,
+        state_province,
+        domains,
+        alpha_two_code,
+        web_pages,
+      } = req.body
+      if (
+        !name ||
+        !country ||
+        !state_province ||
+        !domains ||
+        !alpha_two_code ||
+        !web_pages
+      ) {
+        res.status(400).json({ error: 'Missing required fields' })
+        return
+      }
 
-  async putUniversity(req, res) {}
+      const university = await University.findOne({
+        name,
+        country,
+        state_province,
+      })
+
+      if (university) {
+        res.status(400).json({ error: 'University already exists' })
+        return
+      }
+
+      const newUniversity = new University({
+        name,
+        country,
+        state_province,
+        domains,
+        alpha_two_code,
+        web_pages,
+      })
+      await newUniversity.save()
+      res.json(newUniversity)
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  }
+
+  async putUniversity(req, res) {
+    try {
+      const id = req.params.id
+      const { name, domains, web_pages } = req.body
+      const university = await University.findByIdAndUpdate(
+        id,
+        {
+          name,
+          domains,
+          web_pages,
+        },
+        { new: true }
+      )
+      res.json(university)
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  }
 
   async deleteUniversity(req, res) {
     try {

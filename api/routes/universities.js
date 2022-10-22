@@ -8,7 +8,15 @@ router.get('/', function (req, res, next) {
 })
 
 router.get('/:id', function (req, res, next) {
-  new UniversitiesController().getUniversities(req, res)
+  new UniversitiesController().showUniversity(req, res)
+})
+
+router.post('/', function (req, res, next) {
+  new UniversitiesController().postUniversity(req, res)
+})
+
+router.put('/:id', function (req, res, next) {
+  new UniversitiesController().putUniversity(req, res)
 })
 
 router.delete('/:id', function (req, res, next) {
