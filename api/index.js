@@ -1,14 +1,19 @@
 const app = require('./app')
 const mongoose = require('mongoose')
 
+const MONGODB_URI =
+  process.env.MONGODB_URI || 'mongodb://mongo:27017/universities'
+const MONGODB_USER = process.env.MONGODB_USER || 'root'
+const MONGODB_PASSWORD = process.env.MONGODB_PASSWORD || 'example'
+
 async function main() {
   try {
-    await mongoose.connect('mongodb://mongo:27017/universities', {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       authSource: 'admin',
-      user: 'root',
-      pass: 'example',
+      user: MONGODB_USER,
+      pass: MONGODB_PASSWORD,
     })
 
     app.listen(5000, () => {

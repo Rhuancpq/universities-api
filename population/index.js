@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb')
 const axios = require('axios')
 
-const uri = 'mongodb://root:example@mongo:27017/'
+const uri = process.env.MONGODB_URI || 'mongodb://root:example@mongo:27017/'
 
 const client = new MongoClient(uri, { useUnifiedTopology: true })
 
