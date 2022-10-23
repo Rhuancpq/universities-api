@@ -90,9 +90,9 @@ class UniversitiesController {
       const university = await University.findByIdAndUpdate(
         id,
         {
-          name,
-          domains,
-          web_pages,
+          ...(name && { name }),
+          ...(domains && { domains }),
+          ...(web_pages && { web_pages }),
         },
         { new: true }
       )
